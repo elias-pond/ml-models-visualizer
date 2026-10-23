@@ -1,0 +1,29 @@
+# Cloudflare Pages _headers file — sets long-cache headers on static assets.
+# This file lives in public/ so `next build` (with output: "export") copies it
+# into out/, where Cloudflare Pages reads it at deploy time.
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# Hashed asset filenames → cache for a year (safe; content-addressed).
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Logo + headshot images → cache for a day (small, rarely change).
+/logos/*
+  Cache-Control: public, max-age=86400
+/headshot.webp
+  Cache-Control: public, max-age=86400
+/headshot-opt.png
+  Cache-Control: public, max-age=86400
+/linkedin.png
+  Cache-Control: public, max-age=86400
+
+# HTML pages → revalidate on every request so new deploys show up fast.
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+/*/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
