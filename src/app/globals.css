@@ -1,0 +1,206 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  /* System font stack — no web-font downloads (DHH/HEY-style lightweighting) */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Monaco, Consolas,
+    "Liberation Mono", monospace;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  /* Claude-inspired brand palette (terracotta accent kept) */
+  --color-brand: #c96442;
+  --color-brand-glow: #d97757;
+  --color-brand-soft: #e89b7a;
+  --color-brand-fg: #fffcf7;
+  --color-canvas: #0c0c0e;
+  --color-canvas-soft: #15151a;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.625rem;
+  /* Barebones black/white/stone theme with a single terracotta accent */
+  --background: #fafaf9;
+  --foreground: #18181b;
+  --card: #ffffff;
+  --card-foreground: #18181b;
+  --popover: #ffffff;
+  --popover-foreground: #18181b;
+  --primary: #18181b;
+  --primary-foreground: #fafaf9;
+  --secondary: #f4f4f3;
+  --secondary-foreground: #18181b;
+  --muted: #f4f4f3;
+  --muted-foreground: #71717a;
+  --accent: #f4f4f3;
+  --accent-foreground: #18181b;
+  --destructive: #b91c1c;
+  --border: #e7e5e4;
+  --input: #e7e5e4;
+  --ring: #c96442;
+  --chart-1: #c96442;
+  --chart-2: #d97757;
+  --chart-3: #e89b7a;
+  --chart-4: #d08c3a;
+  --chart-5: #8c5a3c;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #18181b;
+  --sidebar-primary: #c96442;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f4f4f3;
+  --sidebar-accent-foreground: #18181b;
+  --sidebar-border: #e7e5e4;
+  --sidebar-ring: #c96442;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+  }
+}
+
+/* ---- ML Models Visualizer — barebones black/white + terracotta accent ---- */
+html {
+  scroll-behavior: smooth;
+  background-color: var(--background);
+  color-scheme: light;
+}
+
+body {
+  background: var(--background);
+  min-height: 100vh;
+}
+
+/* Text selection uses the default light-blue highlight every browser
+   ships (Chrome/Safari/Firefox all default to this color). Explicit so the
+   terracotta --ring token never bleeds into selections. */
+::selection {
+  background: #add8e6;
+  color: #000;
+}
+::-moz-selection {
+  background: #add8e6;
+  color: #000;
+}
+
+/* Custom slim scrollbar (neutral) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(113, 113, 122, 0.3) transparent;
+}
+*::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgba(113, 113, 122, 0.28);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(201, 100, 66, 0.5);
+  background-clip: padding-box;
+}
+
+/* Hide scrollbar utility for chip rows */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes viz-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Infinite logo carousel (DHH-style: pure CSS, no JS) */
+@keyframes viz-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: viz-marquee 38s linear infinite;
+  will-change: transform;
+}
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 116px,
+    #000 calc(100% - 116px),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 116px,
+    #000 calc(100% - 116px),
+    transparent
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+}
